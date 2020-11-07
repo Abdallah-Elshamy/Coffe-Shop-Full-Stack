@@ -70,32 +70,33 @@ def add_drink():
 def modify_drink(id):
     try:
         drink = Drink.query.get(id)
-
-        if not drink:
-            abort(404)
-        
-        drink_long = {}
-        try:
-            drink_long = request.get_json()
-        except:
-            abort(400)
-    
-        try:
-            if 'title' in drink_long:
-                drink.title = drink_long['title']
-            if 'recipe' in drink_long:
-                drink.recipe = '[' + json.dumps(drink_long['recipe']) + ']'
-            drink.update()
-            
-            return jsonify({
-                "success": True,
-                "drinks": [drink.long()],
-                }), 200
-
-        except:
-            abort(422)
     except:
         abort(422)
+
+    if not drink:
+        abort(404)
+    
+    drink_long = {}
+    try:
+        drink_long = request.get_json()
+    except:
+        abort(400)
+
+    try:
+        if 'title' in drink_long:
+            drink.title = drink_long['title']
+        if 'recipe' in drink_long:
+            drink.recipe = '[' + json.dumps(drink_long['recipe']) + ']'
+        drink.update()
+        
+        return jsonify({
+            "success": True,
+            "drinks": [drink.long()],
+            }), 200
+
+    except:
+        abort(422)
+    
 
 
 @app.route('/drinks/<int:id>', methods=['DELETE'])
@@ -103,22 +104,23 @@ def modify_drink(id):
 def delete_drink(id):
     try:
         drink = Drink.query.get(id)
-
-        if not drink:
-            abort(404)
-    
-        try:
-            drink.delete()
-            
-            return jsonify({
-                "success": True,
-                "delete": id,
-                }), 200
-
-        except:
-            abort(422)
     except:
         abort(422)
+
+    if not drink:
+        abort(404)
+
+    try:
+        drink.delete()
+        
+        return jsonify({
+            "success": True,
+            "delete": id,
+            }), 200
+
+    except:
+        abort(422)
+    
 
 
 ## Error Handling
