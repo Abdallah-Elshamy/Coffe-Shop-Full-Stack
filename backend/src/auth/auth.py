@@ -37,7 +37,7 @@ def get_token_auth_header():
             'description': 'Authorization malformed.'
             }, 401)
 
-    if header_segments[0].lower() == 'bearer':
+    if header_segments[0].lower() != 'bearer':
         raise AuthError({
             'code': 'invalid_header',
             'description': 'Authorization malformed.'
@@ -125,7 +125,7 @@ def requires_auth(permission=''):
             token = get_token_auth_header()
             payload = verify_decode_jwt(token)
             check_permissions(permission, payload)
-            return f(payload, *args, **kwargs)
+            return f(*args, **kwargs)
 
         return wrapper
     return requires_auth_decorator
