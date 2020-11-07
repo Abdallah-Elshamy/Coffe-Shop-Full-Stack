@@ -49,7 +49,7 @@ def add_drink():
     except:
         abort(400)
 
-    if not drink_long['title'] or not drink_long['recipe']:
+    if not drink_long.get('title') or not drink_long.get('recipe'):
         abort(400)
     
     try:
@@ -65,15 +65,6 @@ def add_drink():
         abort(422)
 
 
-'''
-@TODO implement endpoint
-
-        where <id> is the existing model id
-        it should update the corresponding row for <id>
-        it should contain the drink.long() data representation
-    returns status code 200 and json {"success": True, "drinks": drink} where drink an array containing only the updated drink
-        or appropriate status code indicating reason for failure
-'''
 @app.route('/drinks/<int:id>', methods=['PATCH'])
 @requires_auth('patch:drinks')
 def modify_drink(id):
