@@ -49,16 +49,16 @@ def add_drink():
     except:
         abort(400)
 
-    if not drink_long.get('title') or not drink_long.get('recipe'):
+    if 'title' not in drink_long or 'recipe' not in drink_long:
         abort(400)
     
     try:
         drink = Drink(title=drink_long['title'],
-                      recipe=drink_long['recipe'])
+                      recipe='['+json.dumps(drink_long['recipe'])+']')
         drink.insert()
         return jsonify({
             "success": True,
-            "drinks": [drink.short()],
+            "drinks": [drink.long()],
             }), 200
 
     except:
@@ -79,13 +79,12 @@ def modify_drink(id):
             drink_long = request.get_json()
         except:
             abort(400)
-
-        if not drink_long.get('title') or not drink_long.get('recipe'):
-            abort(400)
     
         try:
-            drink.title = drink_long['title']
-            drink.recipe = drink_long['recipe']
+            if 'title' in drink_long:
+                drink.title = drink_long['title']
+            if 'recipe' in drink_long:
+                drink.recipe = '[' + json.dumps(drink_long['recipe']) + ']'
             drink.update()
             
             return jsonify({
