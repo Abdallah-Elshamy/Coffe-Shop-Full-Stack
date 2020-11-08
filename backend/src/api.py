@@ -11,9 +11,10 @@ app = Flask(__name__)
 setup_db(app)
 CORS(app)
 
-#db_drop_and_create_all()
+# db_drop_and_create_all()
 
-## ROUTES
+# ROUTES
+
 
 @app.route('/drinks')
 def get_drinks():
@@ -23,7 +24,7 @@ def get_drinks():
             "success": True,
             "drinks": drinks,
             }), 200
-    except:
+    except Exception:
         abort(422)
 
 
@@ -36,7 +37,7 @@ def get_drinks_detail():
             "success": True,
             "drinks": drinks,
             }), 200
-    except:
+    except Exception:
         abort(422)
 
 
@@ -46,12 +47,12 @@ def add_drink():
     drink_long = {}
     try:
         drink_long = request.get_json()
-    except:
+    except Exception:
         abort(400)
 
     if 'title' not in drink_long or 'recipe' not in drink_long:
         abort(400)
-    
+
     try:
         drink = Drink(title=drink_long['title'],
                       recipe='['+json.dumps(drink_long['recipe'])+']')
@@ -61,7 +62,7 @@ def add_drink():
             "drinks": [drink.long()],
             }), 200
 
-    except:
+    except Exception:
         abort(422)
 
 
@@ -70,16 +71,16 @@ def add_drink():
 def modify_drink(id):
     try:
         drink = Drink.query.get(id)
-    except:
+    except Exception:
         abort(422)
 
     if not drink:
         abort(404)
-    
+
     drink_long = {}
     try:
         drink_long = request.get_json()
-    except:
+    except Exception:
         abort(400)
 
     try:
@@ -88,15 +89,14 @@ def modify_drink(id):
         if 'recipe' in drink_long:
             drink.recipe = '[' + json.dumps(drink_long['recipe']) + ']'
         drink.update()
-        
+
         return jsonify({
             "success": True,
             "drinks": [drink.long()],
             }), 200
 
-    except:
+    except Exception:
         abort(422)
-    
 
 
 @app.route('/drinks/<int:id>', methods=['DELETE'])
@@ -104,7 +104,7 @@ def modify_drink(id):
 def delete_drink(id):
     try:
         drink = Drink.query.get(id)
-    except:
+    except Exception:
         abort(422)
 
     if not drink:
@@ -112,23 +112,23 @@ def delete_drink(id):
 
     try:
         drink.delete()
-        
+
         return jsonify({
             "success": True,
             "delete": id,
             }), 200
 
-    except:
+    except Exception:
         abort(422)
-    
 
 
-## Error Handling
+# Error Handling
+
 
 @app.errorhandler(422)
 def unprocessable(error):
     return jsonify({
-                    "success": False, 
+                    "success": False,
                     "error": 422,
                     "message": "unprocessable"
                     }), 422
@@ -137,7 +137,7 @@ def unprocessable(error):
 @app.errorhandler(400)
 def bad_request(error):
     return jsonify({
-                    "success": False, 
+                    "success": False,
                     "error": 400,
                     "message": "Bad Request"
                     }), 400
@@ -146,7 +146,7 @@ def bad_request(error):
 @app.errorhandler(404)
 def not_found(error):
     return jsonify({
-                    "success": False, 
+                    "success": False,
                     "error": 404,
                     "message": "resource not found"
                     }), 404
@@ -155,7 +155,7 @@ def not_found(error):
 @app.errorhandler(AuthError)
 def auth_error(error):
     return jsonify({
-                    "success": False, 
+                    "success": False,
                     "error": error.status_code,
                     "message": error.error
                     }), error.status_code
