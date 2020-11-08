@@ -1,5 +1,28 @@
 # Coffee Shop Full Stack
 
+## Auth0 account
+```
+AUTH0_DOMAIN = 'coffee-shop-ud.us.auth0.com'
+ALGORITHMS = ['RS256']
+API_AUDIENCE = 'drink'
+```
+
+There is a Postman collection that tests the APIs. Some of those tests may fail because the token expired. I have created two dummy accounts that you can use to get fresh tokens.
+
+### Manager Account
+```
+User: gandalf@shire.com
+password: MyPrecious123
+
+```
+
+### Barista Account
+```
+User: bilbobagins@shire.com
+password: MyPrecious123
+
+```
+
 ## Full Stack Nano - IAM Final Project
 
 Udacity has decided to open a new digitally enabled cafe for students to order drinks, socialize, and study hard. But they need help setting up their menu experience.
