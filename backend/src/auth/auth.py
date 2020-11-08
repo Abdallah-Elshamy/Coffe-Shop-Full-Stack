@@ -22,6 +22,11 @@ class AuthError(Exception):
 
 ## Auth Header
 def get_token_auth_header():
+    '''
+    Return the token part of the authorization header from the request
+    Raise an AuthError if no header is present
+    Raise an AuthError if the header is malformed
+    '''
     if 'Authorization' not in request.headers:
         raise AuthError({
             'code': 'invalid_header',
@@ -47,6 +52,11 @@ def get_token_auth_header():
 
 
 def check_permissions(permission, payload):
+    '''
+    Return True if permissions are included in the payload
+    Raise an AuthError if permissions are not included in the payload
+    Raise an AuthError if the requested permission string is not in the payload permissions array
+    '''
     if 'permissions' not in payload:
         raise AuthError({
             'code': 'invalid_claims',
@@ -63,6 +73,12 @@ def check_permissions(permission, payload):
 
 
 def verify_decode_jwt(token):
+    '''
+    Return the decoded payload after validating the claims
+    Raise an AuthError if authorization is malformed
+    Raise an AuthError if there is an error in the claims
+    Raise an AuthError if the token expired
+    '''
     # get public key from Auth0
     jsonurl = urlopen(f'https://{AUTH0_DOMAIN}/.well-known/jwks.json')
     jwks = json.loads(jsonurl.read())
@@ -119,6 +135,9 @@ def verify_decode_jwt(token):
 
 
 def requires_auth(permission=''):
+    '''
+    return the decorator which passes the decoded payload to the decorated method
+    '''
     def requires_auth_decorator(f):
         @wraps(f)
         def wrapper(*args, **kwargs):
