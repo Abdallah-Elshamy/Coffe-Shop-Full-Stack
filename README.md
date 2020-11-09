@@ -39,7 +39,7 @@ You have been called on to demonstrate your newly learned skills to create a ful
 
 ### Backend
 
-The `./backend` directory contains a completed Flask server with a pre-written SQLAlchemy module to simplify your data needs. The endpoints are complete, Auth0 has been configured, and integrated for authentication.
+The `./backend` directory contains a complete Flask server with a pre-written SQLAlchemy module to simplify your data needs. The endpoints are complete, Auth0 has been configured, and integrated for authentication.
 
 [View the README.md within ./backend for more details.](./backend/README.md)
 
